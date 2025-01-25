@@ -12,12 +12,12 @@ const PASSWORD_2 = "krish1234";
 describe("Signup Endpoints" ,()=>{
 
     it("Double Signup doesn't work" , async()=>{
-        const response1 = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+        const response1 = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
            number:PHONENUMBER_1
         });
       
 
-        const response2 = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+        const response2 = await axios.post(`${BACKEND_URL}/api/v1/user/signup/verify`, {
             name:NAME_1,
             otp:"0000"
         });
@@ -25,8 +25,10 @@ describe("Signup Endpoints" ,()=>{
         expect(response1.status).toBe(200);
         expect(response2.status).toBe(200)
         expect(response1.data.id).not.toBeNull();
+
+        
         expect(async()=>{
-            await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+            await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
                 number:PHONENUMBER_1
              });
         }).toThrowError();
