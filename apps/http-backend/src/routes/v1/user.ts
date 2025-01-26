@@ -1,8 +1,10 @@
 import { generateToken, verifyToken } from "authenticator";
 import {Router} from "express"
-import {client} from "@repo/db/clinet"
+import { client } from "@repo/db/client";
+
 import jwt from "jsonwebtoken"
 import { JWT_PASSWORD } from "../../config";
+import { sendMessage } from "../../utils/twilio";
 
 const router: Router = Router();
 
@@ -25,8 +27,15 @@ router.post("/signup", async (req,res)=>{
 
    
    if(process.env.NODE_ENV === "production"){
-
-   }
+        try {
+            await sendMessage(number , "Your OTP is " + totp)
+        } catch (error) {
+            res.status(500).json({
+                message:"Could not send otp"
+            })
+            return 
+        }
+   } 
    res.json({
       id:user.id   
    })
